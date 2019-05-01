@@ -1,0 +1,34 @@
+{
+  "nodes": [
+    {"id": "MTH101", "group": 1, "size": 1},
+    {"id": "MTH201", "group": 1, "size": 2},
+    {"id": "MTH301", "group": 1, "size": 3},
+
+    {"id": "ST101", "group": 2, "size": 1},
+    {"id": "ST201", "group": 2, "size": 2},
+    {"id": "ST202", "group": 2, "size": 2},
+
+    {"id": "BA101", "group": 3, "size": 1},
+    {"id": "BA102", "group": 3, "size": 1},
+    {"id": "BA103", "group": 3, "size": 1},
+    {"id": "BA201", "group": 3, "size": 2},
+
+    {"id": "CS501", "group": 5, "size": 4}
+
+  ],
+  "links": [
+    {"source": "MTH101", "target": "MTH201", "value": 1},
+    {"source": "MTH201", "target": "MTH301", "value": 1},
+
+    {"source": "ST101", "target": "ST201", "value": 1},
+    {"source": "ST101", "target": "ST202", "value": 1},
+
+    {"source": "BA101", "target": "BA201", "value": 1},
+    {"source": "BA102", "target": "BA201", "value": 1},
+    {"source": "BA103", "target": "BA201", "value": 1},
+
+    {"source": "MTH301", "target": "CS501", "value": 1},
+    {"source": "ST201", "target": "CS501", "value": 1},
+    {"source": "ST202", "target": "CS501", "value": 1}
+  ]
+}
