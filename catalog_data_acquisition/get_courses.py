@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import pickle
 import requests
+import unicodedata
 
 courses = {}
 
@@ -12,6 +13,7 @@ for url in urls:
     soup = BeautifulSoup(courses_html, 'html.parser')
     for course in soup.find_all(class_='courseblock'):
         title = course.find(class_='courseblocktitle').get_text().split('.')[0]
+        title = unicodedata.normalize('NFKD', title)
         print(title)
         block = course.find(class_='courseblockextra')
         prereqs = ''
@@ -19,6 +21,7 @@ for url in urls:
             if block.find('strong') is not None:
                 if block.find('strong').get_text() == 'Prerequisites:':
                     prereqs = block.get_text().replace('Prerequisites: ', '')
+                    prereqs = unicodedata.normalize('NFKD', prereqs)
         courses[title] = prereqs
 
 courses_file = open('courses.obj', 'wb')

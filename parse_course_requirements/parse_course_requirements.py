@@ -15,8 +15,8 @@ nodes_writer = csv.DictWriter(nodes_csv, fieldnames=['node'])
 
 for course, prereqs in courses.items():
     nodes_writer.writerow({'node': course})
-    for prereq in re.findall(r'[^[( ]+[\dH]+', prereqs):
-        edges_writer.writerow({'source': course, 'dest': prereq})
+    for prereq in re.findall(r'[^[( ]+ [\dH]+', prereqs):
+        edges_writer.writerow({'source': prereq, 'dest': course})
 
 nodes_csv.close()
 edges_csv.close()
