@@ -4,6 +4,10 @@ library(igraph)
 
 
 reqs <- read.csv("./parse_course_requirements/edges.csv", header = F)
+# reqs <- read.csv("../Pickle to CSV/6-30/edges.csv", header = F)
+#  Using this file locally until we merge branches.
+
+
 head(reqs)
 names(reqs) <- c("pre_rec", "course")
 
@@ -59,5 +63,18 @@ reqs$pre_dept[reqs$pre_dept == "NE"] <- "NSE"
 reqs %>% filter(pre_dept != "and", pre_dept != "or", pre_dept != "of", pre_dept != course_dept) %>%
   group_by(pre_dept) %>% 
   summarise(n = n()) %>% arrange(desc(n))
+
+
+# This is going to require some trickery to pass the OR nodes through as pre-requisites.
+#  Maybe they shoudn't count at full weight if they're an OR?  
+#  Count it proportional to the number of elements in the OR maybe?
+
+
+# Create a small plot, math meets CS ------------------------------
+# This will require the OR node data.
+
+
+
+
 
 
