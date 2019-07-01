@@ -15,14 +15,13 @@ for url in urls:
         title = course.find(class_='courseblocktitle').get_text().split('.')[0]
         title = unicodedata.normalize('NFKD', title)
         print(title)
-        block = course.find(class_='courseblockextra')
-        prereqs = ''
-        if block is not None:
-            if block.find('strong') is not None:
-                if block.find('strong').get_text() == 'Prerequisites:':
-                    prereqs = block.get_text().replace('Prerequisites: ', '')
-                    prereqs = unicodedata.normalize('NFKD', prereqs)
-        courses[title] = prereqs
+        for block in course.find_all(class_='courseblockextra'):
+            if block is not None:
+                for strong_tag in block.find_all('strong'):
+                    if strong_tag.get_text() == 'Prerequisites:':
+                        prereqs = block.get_text().replace('Prerequisites: ', '')
+                        prereqs = unicodedata.normalize('NFKD', prereqs)
+                        courses[title] = prereqs
 
 courses_file = open('courses.obj', 'wb')
 pickle.dump(courses, courses_file)
