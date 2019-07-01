@@ -22,7 +22,6 @@ def parse_prereqs(parent, prereqs):
             prereq = re.findall(r'[^[( a-z]+ [\dH]+', prereq)
             or_magnitude = 1 if parent.startswith('OR ') else 0
             if parent in courses_parsed:
-                or_magnitude += courses_parsed[parent]['or_magnitude']
                 prereq.extend(courses_parsed[parent]['prereqs'])
             courses_parsed[parent] = {
                 'or_magnitude': or_magnitude,
@@ -33,7 +32,9 @@ def parse_prereqs(parent, prereqs):
 for course, prereq_str in courses.items():
     if course in ['HORT 360', 'NSE 311']:
         prereq_str = prereq_str + ')'
+
     print(course)
+
     parser = pyparsing.nestedExpr(content=pyparsing.CharsNotIn('()'))
     nested_prereqs = parser.parseString(f'({prereq_str})').asList()[0]
     for prereqs in nested_prereqs:
