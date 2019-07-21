@@ -223,13 +223,7 @@ plot(sub_net, layout = fr_net, directed = T,
 
 # That's pretty good.
 
-
-# Now lets scale by weighted in-degree.
-
-# Out degree: the nubmer of pre_rec edges originating at that course.
-#  We'll want to make the ones which are pre_req going to an OR fractional,  
-#   depending on the number of edges going into that. 
-
+# Academic units feeding into CS, by number of pre-reqs used.
 library(pander)
 head(sub_reqs)
 sub_reqs %>% 
@@ -239,6 +233,25 @@ sub_reqs %>%
   arrange(desc(n)) %>%
   pander()
 
+# Now lets scale by weighted in-degree.
 
+# Out degree: the nubmer of pre_rec edges originating at that course.
+#  We'll want to make the ones which are pre_req going to an OR fractional,  
+#   depending on the number of edges going into that. 
+
+
+head(sub_reqs)
+sr_group <- sub_reqs %>% group_by(pre_rec) %>% summarise(n = n())
+sr_n <- left_join(data.frame(names = names(V(sub_net))), sr_group, by = c("names" = "pre_rec"))
+head(sr_n)
+sr_n$n[is.na(sr_n$n)] <- 0
+
+sr_layout <- layout_nicely(sub_net)
+plot(sub_net, directed = T,
+     layout = sr_layout,
+     edge.color = sub_reqs$or, 
+     vertex.size = sr_n$n * 1.5, 
+     vertex.shape = c("circle", "square")[grepl(x = names(V(sub_net)), pattern = "OR.+") + 1], 
+     vertex.color =  c("grey", "steelblue")[grepl(x = names(V(sub_net)), pattern = "OR.+") + 1])
 
 
