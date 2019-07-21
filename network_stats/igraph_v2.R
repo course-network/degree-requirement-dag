@@ -221,3 +221,24 @@ plot(sub_net, layout = fr_net, directed = T,
      vertex.shape = c("circle", "square")[grepl(x = names(V(sub_net)), pattern = "OR.+") + 1], 
      vertex.color =  c("grey", "steelblue")[grepl(x = names(V(sub_net)), pattern = "OR.+") + 1])
 
+# That's pretty good.
+
+
+# Now lets scale by weighted in-degree.
+
+# Out degree: the nubmer of pre_rec edges originating at that course.
+#  We'll want to make the ones which are pre_req going to an OR fractional,  
+#   depending on the number of edges going into that. 
+
+library(pander)
+head(sub_reqs)
+sub_reqs %>% 
+  filter(!(pre_dept %in% c("CS", "OR"))) %>% 
+  group_by(pre_dept) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>%
+  pander()
+
+
+
+
