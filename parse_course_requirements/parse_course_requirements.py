@@ -86,6 +86,23 @@ def create_missing_nodes(courses):
                                           'or_magnitude': 1}
 
 
+def remove_identical_or_nodes(courses):
+    duplicate_nodes = []
+    for key1 in set([i for i in courses.keys() if i.startswith('OR')]):
+        keys = [i for i in courses.keys() if i.startswith('OR')]
+        keys.remove(key1)
+        for key2 in set(keys):
+            if (courses[key1]['prereqs'] == courses[key2]['prereqs'] and
+               courses[key1]['or_magnitude'] == courses[key2]['or_magnitude']):
+                duplicate_nodes.append(key2)
+                for key in courses_parsed.keys():
+                    if key2 in courses_parsed[key]['prereqs']:
+                        courses_parsed[key]['prereqs'].remove(key2)
+                        courses_parsed[key]['prereqs'].append(key1)
+    for duplicate_node in set(duplicate_nodes):
+        del courses_parsed[duplicate_node]
+
+
 for course, prereq_str in courses.items():
     # Fix errors in catalog
     if course in ['HORT 360', 'NSE 311']:
@@ -109,6 +126,8 @@ clean_parsed_courses(courses_parsed)
 
 # Create nodes for courses no longer offered, but still satisfy prereqs
 create_missing_nodes(courses_parsed)
+
+remove_identical_or_nodes(courses_parsed)
 
 # Save parsed courses
 courses_parsed_file = open('courses_parsed.obj', 'wb')
