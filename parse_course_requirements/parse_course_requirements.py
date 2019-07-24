@@ -78,10 +78,20 @@ def clean_parsed_courses(courses):
                                              ' '.join(courses[key]['prereqs']))
 
 
+def create_missing_nodes(courses):
+    for key in set(courses.keys()):
+        for prereq in courses[key]['prereqs']:
+            if prereq not in courses:
+                courses_parsed[prereq] = {'prereqs': [],
+                                          'or_magnitude': 1}
+
+
 for course, prereq_str in courses.items():
     # Fix errors in catalog
     if course in ['HORT 360', 'NSE 311']:
-            prereq_str = prereq_str + ')'
+        prereq_str = prereq_str + ')'
+    if course in ['ALS 161' or 'ALS 162']:
+        preq_str = 'ALS 150 and ALS 151'
 
     # Create nested lists delimited by parantheses
     parser = pyparsing.nestedExpr(content=pyparsing.CharsNotIn('()'))
@@ -94,10 +104,11 @@ for course, prereq_str in courses.items():
     # Traverse regexed object, adding OR nodes
     generate_course_object(course, nested_prereqs_regexed)
 
-    print(course)
-
 # Clean courses_parsed for OR, and, or by matching course number regex
 clean_parsed_courses(courses_parsed)
+
+# Create nodes for courses no longer offered, but still satisfy prereqs
+create_missing_nodes(courses_parsed)
 
 # Save parsed courses
 courses_parsed_file = open('courses_parsed.obj', 'wb')
