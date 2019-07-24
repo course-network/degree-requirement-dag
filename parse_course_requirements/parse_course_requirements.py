@@ -87,20 +87,21 @@ def create_missing_nodes(courses):
 
 
 def remove_identical_or_nodes(courses):
-    duplicate_nodes = []
-    for key1 in set([i for i in courses.keys() if i.startswith('OR')]):
+    for key1 in [i for i in courses.keys() if i.startswith('OR')]:
         keys = [i for i in courses.keys() if i.startswith('OR')]
-        keys.remove(key1)
-        for key2 in set(keys):
-            if (courses[key1]['prereqs'] == courses[key2]['prereqs'] and
-               courses[key1]['or_magnitude'] == courses[key2]['or_magnitude']):
-                duplicate_nodes.append(key2)
-                for key in courses_parsed.keys():
-                    if key2 in courses_parsed[key]['prereqs']:
-                        courses_parsed[key]['prereqs'].remove(key2)
-                        courses_parsed[key]['prereqs'].append(key1)
-    for duplicate_node in set(duplicate_nodes):
-        del courses_parsed[duplicate_node]
+        if key1 in keys:
+            keys.remove(key1)
+            for key2 in keys:
+                if (courses[key1]['prereqs'] == courses[key2]['prereqs'] and
+                   courses[key1]['or_magnitude'] ==
+                   courses[key2]['or_magnitude']):
+                    for key in set(courses_parsed.keys()):
+                        if (key in courses_parsed and key2 in
+                           courses_parsed[key]['prereqs']):
+                            courses_parsed[key]['prereqs'].remove(key2)
+                            courses_parsed[key]['prereqs'].append(key1)
+                            if key2 in courses_parsed:
+                                del courses_parsed[key2]
 
 
 for course, prereq_str in courses.items():
