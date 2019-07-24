@@ -57,7 +57,7 @@ def generate_course_object(course, regexed_prereqs):
         else:
             if len(sub_keys[0]) == 1:
                 # Handle trailing OR
-                if any(i is 'O' for i in regexed_prereqs[sub_keys[0]]):
+                if any(i is 'O' or 'or' for i in regexed_prereqs[sub_keys[0]]):
                     for key in courses_parsed:
                         if course in courses_parsed[key]['prereqs']:
                             update_node(key, ['OR'])
