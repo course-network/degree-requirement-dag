@@ -1,6 +1,6 @@
 import json
 
-obj = json.load(open('../mock_data_pretty.json'))
+obj = json.load(open('../mock_data.json'))
 nodes = list(filter(lambda x: 'CS ' in x['id'], obj['nodes']))
 classes = list(map(lambda x: x['id'], nodes))
 
