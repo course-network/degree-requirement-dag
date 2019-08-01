@@ -1,51 +1,37 @@
 import json
+from sys import argv
 import unicodedata
 
 from bs4 import BeautifulSoup
 import requests
 
-from config import url, output_path
+from utils import filter_data
 
-html = requests.get(url).text
-soup = BeautifulSoup(html, 'html.parser')
-courses = list(map(
-    lambda x: unicodedata.normalize('NFKD', x['title']),
-    soup.find_all(class_='bubblelink code')
-))
+if __name__ == '__main__':
+    if len(argv) < 2:
+        exit("Usage: 'python3 get_degree_requirments.py [degree]'")
+    degree = argv[1]
 
-obj = json.load(open('../mock_data.json'))
-links = list(filter(
-    lambda x: x['target'] in courses,
-    obj['links']
-))
+    urls = json.load(open('./degree_requirement_urls.json'))
+    if degree not in urls:
+        exit(f'Invalid degree. Valid choices are {list(urls.keys())}')
 
-# Add prerequisite links
-while True:
-    sources = set(map(lambda x: x['source'], links))
-    new_links = list(filter(
-        lambda x: x['target'] in sources,
-        obj['links']
+    url = urls[degree]
+
+    html = requests.get(url).text
+    soup = BeautifulSoup(html, 'html.parser')
+    courses = list(map(
+        lambda x: unicodedata.normalize('NFKD', x['title']),
+        soup.select('a.code.bubblelink')
     ))
-    diff = [i for i in new_links if i not in links]
-    if not diff:
-        break
-    links.extend(diff)
 
-new_sources = set(map(lambda x: x['source'], links))
-new_targets = set(map(lambda x: x['target'], links))
-new_courses = list(new_sources.union(new_targets))
+    filtered_data = filter_data(courses)
 
-nodes = list(filter(lambda x: x['id'] in new_courses, obj['nodes']))
+    output_path = f'./mock_data_{degree}.json'
+    with open(output_path, 'w') as f:
+        f.write(json.dumps(filtered_data, sort_keys=True, indent=4))
 
-# Sort nodes by 'id' and links by 'source' and 'target'
-nodes.sort(key=lambda x: x['id'])
-links.sort(key=lambda x: f"{x['source']}|{x['target']}")
-
-filtered = {'links': links, 'nodes': nodes}
-
-# output_path = './mock_data_filtered.json'
-with open(output_path, 'w') as f:
-    f.write(json.dumps(filtered, sort_keys=True, indent=4))
-
-print(f"result: {len(nodes)} nodes, {len(links)} edges")
-print(f'wrote file to {output_path}')
+    print(
+        f"result: {len(filtered_data['nodes'])} nodes, "
+        f"{len(filtered_data['links'])} edges")
+    print(f'wrote file to {output_path}')
