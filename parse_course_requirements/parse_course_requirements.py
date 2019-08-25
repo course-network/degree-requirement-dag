@@ -2,7 +2,7 @@ import pickle
 import pyparsing
 import re
 
-courses_file = open('../catalog_data_acquisition/courses.obj', 'rb')
+courses_file = open('../course_data/courses.obj', 'rb')
 courses = pickle.load(courses_file)
 
 courses_parsed = {}
@@ -135,5 +135,5 @@ create_missing_nodes(courses_parsed)
 remove_identical_or_nodes(courses_parsed)
 
 # Save parsed courses
-courses_parsed_file = open('courses_parsed.obj', 'wb')
+courses_parsed_file = open('../course_data/courses_parsed.obj', 'wb')
 pickle.dump(courses_parsed, courses_parsed_file)

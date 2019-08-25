@@ -14,6 +14,6 @@ for link in soup.find(class_='az_sitemap').find_all('a'):
     if url is not None:
         urls.append(f'https://catalog.oregonstate.edu{url}')
 
-urls_file = open('department_urls.obj', 'wb')
+urls_file = open('../course_data/department_urls.obj', 'wb')
 pickle.dump(urls, urls_file)
 urls_file.close()

@@ -2,7 +2,7 @@ import pickle
 
 
 def filter_data(courses):
-    obj = pickle.load(open('../parse_course_requirements/courses_parsed.obj',
+    obj = pickle.load(open('../course_data/courses_parsed.obj',
                            'rb'))
 
     # Add prerequisite courses

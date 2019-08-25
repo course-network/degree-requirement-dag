@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     filtered_data = filter_data(courses)
 
-    output_path = f'./catalog_{degree}.obj'
+    output_path = f'../course_data/{degree}_courses.obj'
     with open(output_path, 'wb') as f:
         pickle.dump(filtered_data, f)
 

@@ -14,7 +14,7 @@ var simulation = d3.forceSimulation()
                    .force("attractForce", attractForce)
                    .force("repelForce", repelForce);
 
-d3.json('mock_data.json', function(error, graph) {
+d3.json('course_data/physics_courses.json', function(error, graph) {
   if (error) throw error;
 
   var link = svg.append('g')

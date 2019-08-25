@@ -5,7 +5,7 @@ import unicodedata
 
 courses = {}
 
-urls_file = open('department_urls.obj', 'rb')
+urls_file = open('../course_data/department_urls.obj', 'rb')
 urls = pickle.load(urls_file)
 
 for url in urls:
@@ -19,9 +19,10 @@ for url in urls:
             if block is not None:
                 for strong_tag in block.find_all('strong'):
                     if strong_tag.get_text() == 'Prerequisites:':
-                        prereqs = block.get_text().replace('Prerequisites: ', '')
+                        prereqs = block.get_text().replace('Prerequisites: ',
+                                                           '')
                         prereqs = unicodedata.normalize('NFKD', prereqs)
                         courses[title] = prereqs
 
-courses_file = open('courses.obj', 'wb')
+courses_file = open('../course_data/courses.obj', 'wb')
 pickle.dump(courses, courses_file)
