@@ -57,7 +57,7 @@ def generate_course_object(course, regexed_prereqs):
         else:
             if len(sub_keys[0]) == 1:
                 # Handle trailing OR
-                if any(i is 'O' for i in regexed_prereqs[sub_keys[0]]):
+                if any(i is 'O' or 'or' for i in regexed_prereqs[sub_keys[0]]):
                     for key in courses_parsed:
                         if course in courses_parsed[key]['prereqs']:
                             update_node(key, ['OR'])
@@ -78,10 +78,38 @@ def clean_parsed_courses(courses):
                                              ' '.join(courses[key]['prereqs']))
 
 
+def create_missing_nodes(courses):
+    for key in set(courses.keys()):
+        for prereq in courses[key]['prereqs']:
+            if prereq not in courses:
+                courses_parsed[prereq] = {'prereqs': [],
+                                          'or_magnitude': 1}
+
+
+def remove_identical_or_nodes(courses):
+    for key1 in [i for i in courses.keys() if i.startswith('OR')]:
+        keys = [i for i in courses.keys() if i.startswith('OR')]
+        if key1 in keys:
+            keys.remove(key1)
+            for key2 in keys:
+                if (courses[key1]['prereqs'] == courses[key2]['prereqs'] and
+                   courses[key1]['or_magnitude'] ==
+                   courses[key2]['or_magnitude']):
+                    for key in set(courses_parsed.keys()):
+                        if (key in courses_parsed and key2 in
+                           courses_parsed[key]['prereqs']):
+                            courses_parsed[key]['prereqs'].remove(key2)
+                            courses_parsed[key]['prereqs'].append(key1)
+                            if key2 in courses_parsed:
+                                del courses_parsed[key2]
+
+
 for course, prereq_str in courses.items():
     # Fix errors in catalog
     if course in ['HORT 360', 'NSE 311']:
-            prereq_str = prereq_str + ')'
+        prereq_str = prereq_str + ')'
+    if course in ['ALS 161' or 'ALS 162']:
+        preq_str = 'ALS 150 and ALS 151'
 
     # Create nested lists delimited by parantheses
     parser = pyparsing.nestedExpr(content=pyparsing.CharsNotIn('()'))
@@ -94,10 +122,13 @@ for course, prereq_str in courses.items():
     # Traverse regexed object, adding OR nodes
     generate_course_object(course, nested_prereqs_regexed)
 
-    print(course)
-
 # Clean courses_parsed for OR, and, or by matching course number regex
 clean_parsed_courses(courses_parsed)
+
+# Create nodes for courses no longer offered, but still satisfy prereqs
+create_missing_nodes(courses_parsed)
+
+remove_identical_or_nodes(courses_parsed)
 
 # Save parsed courses
 courses_parsed_file = open('courses_parsed.obj', 'wb')
