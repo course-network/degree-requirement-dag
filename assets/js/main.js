@@ -4,10 +4,15 @@ var svg = d3.select('svg'),
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
+var attractForce = d3.forceManyBody().strength(300).distanceMax(400).distanceMin(60);
+var repelForce = d3.forceManyBody().strength(-800).distanceMax(300).distanceMin(0);
+
 var simulation = d3.forceSimulation()
                    .force('link', d3.forceLink().id(function(d) { return d.id; }))
                    .force('charge', d3.forceManyBody())
-                   .force('center', d3.forceCenter(width / 2, height / 2));
+                   .force('center', d3.forceCenter(width / 2, height / 2))
+                   .force("attractForce", attractForce)
+                   .force("repelForce", repelForce);
 
 d3.json('mock_data.json', function(error, graph) {
   if (error) throw error;
@@ -53,7 +58,7 @@ d3.json('mock_data.json', function(error, graph) {
         .attr('x2', function(d) { return d.target.x; })
         .attr('y2', function(d) { return d.target.y; });
 
-    node.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
+    node.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.fy + ')'; });
   }
 });
 

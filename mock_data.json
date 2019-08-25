@@ -1,19 +1,19 @@
 {
   "nodes": [
-    {"id": "MTH101", "group": 1, "size": 1},
-    {"id": "MTH201", "group": 1, "size": 2},
-    {"id": "MTH301", "group": 1, "size": 3},
+    {"id": "MTH101", "group": 1, "size": 1, "fy": 699},
+    {"id": "MTH201", "group": 1, "size": 2, "fy": 599},
+    {"id": "MTH301", "group": 1, "size": 3, "fy": 499},
 
-    {"id": "ST101", "group": 2, "size": 1},
-    {"id": "ST201", "group": 2, "size": 2},
-    {"id": "ST202", "group": 2, "size": 2},
+    {"id": "ST101", "group": 2, "size": 1, "fy": 699},
+    {"id": "ST201", "group": 2, "size": 2, "fy": 599},
+    {"id": "ST202", "group": 2, "size": 2, "fy": 499},
 
-    {"id": "BA101", "group": 3, "size": 1},
-    {"id": "BA102", "group": 3, "size": 1},
-    {"id": "BA103", "group": 3, "size": 1},
-    {"id": "BA201", "group": 3, "size": 2},
+    {"id": "BA101", "group": 3, "size": 1, "fy": 699},
+    {"id": "BA102", "group": 3, "size": 1 ,"fy": 698},
+    {"id": "BA103", "group": 3, "size": 1 ,"fy": 697},
+    {"id": "BA201", "group": 3, "size": 2 ,"fy": 599},
 
-    {"id": "CS501", "group": 5, "size": 4}
+    {"id": "CS501", "group": 5, "size": 4, "fy": 299}
 
   ],
   "links": [
