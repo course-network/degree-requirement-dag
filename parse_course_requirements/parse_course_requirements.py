@@ -111,6 +111,10 @@ for course, prereq_str in courses.items():
     if course in ['ALS 161' or 'ALS 162']:
         preq_str = 'ALS 150 and ALS 151'
 
+    # Errors in parsing (to be fixed)
+    if course in ['HDFS 331', 'WR 383']:
+        prereq_str = ''
+
     # Create nested lists delimited by parantheses
     parser = pyparsing.nestedExpr(content=pyparsing.CharsNotIn('()'))
     nested_prereqs = parser.parseString(f'({prereq_str})').asList()[0]
