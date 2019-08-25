@@ -1,4 +1,5 @@
 import json
+import pickle
 from sys import argv
 import unicodedata
 
@@ -27,11 +28,9 @@ if __name__ == '__main__':
 
     filtered_data = filter_data(courses)
 
-    output_path = f'./mock_data_{degree}.json'
-    with open(output_path, 'w') as f:
-        f.write(json.dumps(filtered_data, sort_keys=True, indent=4))
+    output_path = f'./catalog_{degree}.obj'
+    with open(output_path, 'wb') as f:
+        pickle.dump(filtered_data, f)
 
-    print(
-        f"result: {len(filtered_data['nodes'])} nodes, "
-        f"{len(filtered_data['links'])} edges")
+    print(f"result: {len(filtered_data)} nodes")
     print(f'wrote file to {output_path}')

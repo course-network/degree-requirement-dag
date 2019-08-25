@@ -1,33 +1,23 @@
-import json
+import pickle
 
 
 def filter_data(courses):
-    obj = json.load(open('../mock_data.json'))
-    links = list(filter(
-        lambda x: x['target'] in courses,
-        obj['links']
-    ))
+    obj = pickle.load(open('../parse_course_requirements/courses_parsed.obj',
+                           'rb'))
 
-    # Add prerequisite links
+    # Add prerequisite courses
+    sources = set([course for course in obj if course in courses])
+    new_sources = sources.copy()
     while True:
-        sources = set(map(lambda x: x['source'], links))
-        new_links = list(filter(
-            lambda x: x['target'] in sources,
-            obj['links']
-        ))
-        diff = [i for i in new_links if i not in links]
+        for course in sources:
+            new_sources.update(set(obj[course]['prereqs']))
+        diff = set([i for i in new_sources if i not in sources])
         if not diff:
             break
-        links.extend(diff)
+        sources.update(diff)
 
-    new_sources = set(map(lambda x: x['source'], links))
-    new_targets = set(map(lambda x: x['target'], links))
-    new_courses = list(new_sources.union(new_targets))
+    courses = {}
+    for course in sources:
+        courses[course] = obj[course]
 
-    nodes = list(filter(lambda x: x['id'] in new_courses, obj['nodes']))
-
-    # Sort nodes by 'id' and links by 'source' and 'target'
-    nodes.sort(key=lambda x: x['id'])
-    links.sort(key=lambda x: f"{x['source']}|{x['target']}")
-
-    return {'links': links, 'nodes': nodes}
+    return courses
