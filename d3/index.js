@@ -19,8 +19,8 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
         .attr('fill', '#999')
         .style('stroke','none');
 
-    var attractForce = d3.forceManyBody().strength(100).distanceMax(400).distanceMin(60);
-    var repelForce = d3.forceManyBody().strength(-400).distanceMax(300).distanceMin(0);
+    var attractForce = d3.forceManyBody().strength(500).distanceMax(4000).distanceMin(600);
+    var repelForce = d3.forceManyBody().strength(-1600).distanceMax(3000).distanceMin(0);
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {return d.id;}).distance(100).strength(1))
         .force("charge", d3.forceManyBody())
@@ -28,7 +28,7 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
         .force("attractForce", attractForce)
         .force("repelForce", repelForce);
 
-    d3.json("../course_data/d3/physics_courses.json", function (error, graph) {
+    d3.json("../course_data/d3/bee_courses.json", function (error, graph) {
         if (error) throw error;
         update(graph.links, graph.nodes);
     })
@@ -73,7 +73,7 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
         node.append("text")
             .attr("dy", -3)
-            .text(function (d) {return d.id+":";});
+            .text(function (d) {return d.id;});
 
         simulation
             .nodes(nodes)
@@ -91,7 +91,7 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
             .attr("y2", function (d) {return d.target.y;});
 
         node
-            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.fy + ")";});
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
         edgepaths.attr('d', function (d) {
             return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
         });

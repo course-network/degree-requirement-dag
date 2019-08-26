@@ -1,7 +1,7 @@
 import pickle
 
 
-def filter_data(courses):
+def filter_data(courses, degree):
     obj = pickle.load(open('../course_data/courses_parsed.obj',
                            'rb'))
 
@@ -20,4 +20,8 @@ def filter_data(courses):
     for course in sources:
         courses[course] = obj[course]
 
+    courses[degree] = {
+            'prereqs': list(courses.keys()),
+            'or_magnitude': len(courses.keys())
+    }
     return courses

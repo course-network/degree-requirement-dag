@@ -11,22 +11,20 @@ from utils import filter_data
 if __name__ == '__main__':
     if len(argv) < 2:
         exit("Usage: 'python3 get_degree_requirments.py [degree]'")
-    degree = argv[1]
-
+    degrees = argv[1:]
     urls = json.load(open('./degree_requirement_urls.json'))
-    if degree not in urls:
-        exit(f'Invalid degree. Valid choices are {list(urls.keys())}')
-
-    url = urls[degree]
-
-    html = requests.get(url).text
-    soup = BeautifulSoup(html, 'html.parser')
-    courses = list(map(
-        lambda x: unicodedata.normalize('NFKD', x['title']),
-        soup.select('a.code.bubblelink')
-    ))
-
-    filtered_data = filter_data(courses)
+    filtered_data = {}
+    for degree in degrees:
+        if degree not in urls:
+            exit(f'Invalid degree. Valid choices are {list(urls.keys())}')
+        url = urls[degree]
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, 'html.parser')
+        courses = list(map(
+            lambda x: unicodedata.normalize('NFKD', x['title']),
+            soup.select('a.code.bubblelink')
+        ))
+        filtered_data.update(filter_data(courses, degree))
 
     output_path = f'../course_data/{degree}_courses.obj'
     with open(output_path, 'wb') as f:
