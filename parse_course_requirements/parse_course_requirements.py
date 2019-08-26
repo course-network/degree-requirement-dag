@@ -55,9 +55,11 @@ def generate_course_object(course, regexed_prereqs):
             generate_course_object(f'OR {or_id}', or_prereqs)
         # If only one subkey, add prereq to parsed_courses
         else:
-            if len(sub_keys[0]) == 1:
-                # Handle trailing OR
-                if any(i is 'O' or 'or' for i in regexed_prereqs[sub_keys[0]]):
+            if len(sub_keys[0]) == 1 and not any(
+              ['or' in i for i in regexed_prereqs[sub_keys[0]]]):
+                if (any(i is 'O' for i in regexed_prereqs[sub_keys[0]])
+                   and not any(
+                   ['and' in i for i in regexed_prereqs[sub_keys[0]]])):
                     for key in courses_parsed:
                         if course in courses_parsed[key]['prereqs']:
                             update_node(key, ['OR'])
@@ -66,9 +68,12 @@ def generate_course_object(course, regexed_prereqs):
             # reformat list of strings as nested object to generate OR-1 node
             else:
                 prereqs = {}
-                prereqs[(0, 0)] = ['OR']
+                if any(['and' in i for i in regexed_prereqs[sub_keys[0]]]):
+                    prereqs[(0, 0)] = ['AND']
+                else:
+                    prereqs[(0, 0)] = ['OR']
                 for idx, prereq in enumerate(regexed_prereqs[sub_keys[0]]):
-                    prereqs[(0, idx + 1)] = [prereq]
+                    prereqs[(0, idx + 1)] = [prereq.replace('or', '')]
                 generate_course_object(course, prereqs)
 
 
@@ -108,8 +113,10 @@ for course, prereq_str in courses.items():
     # Fix errors in catalog
     if course in ['HORT 360', 'NSE 311']:
         prereq_str = prereq_str + ')'
-    if course in ['ALS 161' or 'ALS 162']:
-        preq_str = 'ALS 150 and ALS 151'
+    if course in ['ALS 161', 'ALS 162']:
+        prereq_str = 'ALS 150 and ALS 151'
+    if course in ['BB 331']:
+        prereq_str = '(CH 122 with D- or better or CH 202 with D- or better or CH 222 with D- or better or CH 225H with D- or better or CH 232 with D- or better or CH 232H with D- or better or CH 262 with D- or better or CH 262H with D- or better or CH 272 with D- or better)'
 
     # Errors in parsing (to be fixed)
     if course in ['HDFS 331', 'WR 383']:
