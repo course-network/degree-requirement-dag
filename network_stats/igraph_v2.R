@@ -2,10 +2,7 @@
 library(dplyr)
 library(igraph)
 
-
-# reqs <- read.csv("./parse_course_requirements/edges.csv", header = F)
-reqs <- read.csv("./convert_database_format/edges.csv", header = F)
-#  Using this file locally until we merge branches.
+reqs <- read.csv("./course_data/csv/courses_parsed_edges.csv", header = F)
 
 
 head(reqs)
@@ -13,8 +10,8 @@ names(reqs) <- c("pre_rec", "course")
 
 
 req_net <- graph_from_data_frame(reqs, directed = T)
-plot(req_net, directed = T)
-tree_layout <- layout.reingold.tilford(req_net, root = "ST 623", circular = FALSE, flip.y = FALSE)
+plot(req_net, directed = T)  # Takes 30 sec to plot it.  All the nodes, with labels.
+# tree_layout <- layout.reingold.tilford(req_net, root = "ST 623", circular = FALSE, flip.y = FALSE)
 
 
 # stat <- stat %>% select(ref, course, pre_rec, name)
@@ -23,13 +20,13 @@ tree_layout <- layout.reingold.tilford(req_net, root = "ST 623", circular = FALS
 # st_net <- graph_from_data_frame(stat, directed = T)
 # plot(st_net)
 
-st_net <- graph_from_data_frame(stat, directed = T)
-plot(st_net)
-plot(st_net, edge.color = stat$pre_rec, edge.curved = 0.3, edge.width = 2) # Thicker lines
-
-# Calculate node degree
-degree(st_net)
-plot(st_net, vertex.color = degree(st_net))
+# st_net <- graph_from_data_frame(stat, directed = T)
+# plot(st_net)
+# plot(st_net, edge.color = stat$pre_rec, edge.curved = 0.3, edge.width = 2) # Thicker lines
+# 
+# # Calculate node degree
+# degree(st_net)
+# plot(st_net, vertex.color = degree(st_net))
 
 
 
@@ -51,13 +48,20 @@ reqs$course_dept <- sub(x = reqs$course,
 #  were in-department.
 table(reqs$pre_dept == reqs$course_dept)
 
+# NE became NSE.
 reqs$pre_dept[reqs$pre_dept == "NE"] <- "NSE"
 # Count number of dependencies.
-reqs %>% filter(pre_dept != "of") %>%
+#  'of' problem is fixed?
+reqs %>% # filter(pre_dept != "of") %>%
   group_by(pre_dept) %>%
   summarise(n = n()) %>% arrange(desc(n))
 
-# Count number of
+reqs %>% filter(pre_dept != "OR") %>%
+  group_by(pre_dept) %>%
+  summarise(n = n()) %>% arrange(desc(n))
+
+
+# Count number of courses referred to out of academic unit.
 # Nuclear science got changed to NSE.
 reqs$pre_dept[reqs$pre_dept == "NE"] <- "NSE"
 reqs %>% filter(pre_dept != "and", pre_dept != "or", pre_dept != "of", pre_dept != course_dept) %>%
