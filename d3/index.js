@@ -28,7 +28,7 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
         .force("attractForce", attractForce)
         .force("repelForce", repelForce);
 
-    d3.json("../course_data/d3/bee_courses.json", function (error, graph) {
+    d3.json("../course_data/d3/env_engr_courses.json", function (error, graph) {
         if (error) throw error;
         update(graph.links, graph.nodes);
     })
