@@ -39,15 +39,15 @@ course$course_dept <- sub(x = course$course,
                         replacement = "\\1")
 
 
-# Set seed nodes
-# Find degree:
-head(reqs)
-head(course)
-course %>% filter(course_dept == "OR") %>% arrange(desc(n))
-reqs %>% filter(course == "OR 66")
-reqs %>% filter(pre_rec == "OR 66")
-# the course ATS 310 has one pre-requisite that can be filled by any of 7 courses.
-#  (It has some other pre-requisites also.)
+# # Set seed nodes
+# # Find degree:
+# head(reqs)
+# head(course)
+# course %>% filter(course_dept == "OR") %>% arrange(desc(n))
+# reqs %>% filter(course == "OR 66")
+# reqs %>% filter(pre_rec == "OR 66")
+# # the course ATS 310 has one pre-requisite that can be filled by any of 7 courses.
+# #  (It has some other pre-requisites also.)
 
 cs <- course %>% filter(course_dept == "CS")
 join_cs <- left_join(cs %>% select(-n), 
@@ -55,15 +55,26 @@ join_cs <- left_join(cs %>% select(-n),
 head(join_cs)
 sum(is.na(join_cs$pre_rec))
 join_cs %>% filter(is.na(pre_rec))
+# These aren't the courses we want.  
+# It's the collection of all courses from CS which weren't listed as a course
+#  in at least one pre-req.  PR's go from PR to Course, so that's not bad, except
+#  that there are a lot of PR that go from outside CS into CS in the PR list.
+# This list only shows those within CS that have no input from anywhere.
 
+# Examples: 
+#  534, machine learning.  No PR, oddly. 
+#  571: software eng methods - only a recomended course.  
+#  581: programming languages.  No PRs, despite the fact that it covers "lambda calculus".
 
 # What we really want is a CS course with no PR in CS, so lets find all the courses with CS PR.
 cs_only <- left_join(cs %>% select(-n), 
-                       reqs %>% filter((course_dept == "CS") & (pre_dept == "CS")), by = c("course"))
+                       reqs %>% filter((course_dept == "CS") & 
+                                         (pre_dept == "CS")), 
+                     by = c("course"))
 
 cs_only %>% arrange(course)
 cs_only %>% filter(is.na(pre_rec)) %>% select(course)
-# These courses have no pre-req in CS.
+# These courses have NO pre-req in CS.
 
 # CS Courses with PR in CS, by PR.
 # These are direct PRs only, don't include the OR group.
@@ -91,6 +102,14 @@ seed_group <- csor_join %>% filter(is.na(pre_rec)) %>% arrange(course) %>%
 seed_group$rank <- sub(x = seed_group$course, pattern = ".+ ([0-9])[0-9]+", replacement = "\\1")
 sub(x = seed_group$course, pattern = ".+ ([0-9])[0-9]+", replacement = "\\1")
 
+# Some wrong courses got in there.  444 shouldn't be there.
+# Try again
+csor_join %>% group_by(course) %>% summarise(n = n()) %>% View()
+
+ csor_join %>% filter(is.na(pre_rec))  %>% 
+   filter(course_dept.x == "CS") %>% head()
+
+
 
 seed_group
 seed_group %>% filter(rank == 1)
@@ -113,6 +132,25 @@ dim(cs_edges)
 edge_matrix <- as.matrix(full_cs_edges[ , c("pre_rec", "course")])
 csnet <- graph_from_edgelist(el = edge_matrix, directed = T)
 plot(csnet)
+V(csnet)$label.cex = 0.65
+V(csnet)$arrow.size = 0.2
+V(csnet)$arrow.width = 0.2
+E(csnet)$edge.width = 0.5
+E(csnet)$arrow.width = 1
+E(csnet)$arrow.size = 0.25
+
+# This is the plot I shared on Discord, 
+plot(csnet,
+     directed = T,
+     # edge.color = sub_reqs$or,
+     vertex.size = 8,
+     vertex.shape = c("circle", "square")[grepl(x = names(V(csnet)), pattern = "OR.+") + 1],
+     vertex.color =  c("grey", "steelblue")[grepl(x = names(V(csnet)), pattern = "OR.+") + 1])
+
+
+
+
+
 
 # So if this is the right set of edges, 
 #  Find all adjacent ones to the starting set.
@@ -123,6 +161,17 @@ adj_rank1[[2]]
 adj_rank1[[3]]
 adj_rank1[[4]]
 
+names(adj_rank1[[1]])
+
+
+# All the courses adjacent to rank 1 courses.
+as.vector(unlist(lapply(X = adj_rank1, FUN = names)))
+
+
+
+
+
+
 # Looking around a little bit...
 reqs %>% filter(course == "CS 395")
 reqs %>% filter(course == "OR 438")
@@ -130,6 +179,10 @@ reqs %>% filter(course == "OR 428")
 # OK yes, this CS course really can have an OR requirement with ART 120.
 #  However, ART 120 doesn't exist anymore.
 #  The course is a website design course. 
+
+rank2 <- seed_group %>% filter(rank == 2) %>% select(course) %>% unlist() %>% as.vector()
+
+
 
 find_adjacent <- function(){
   
