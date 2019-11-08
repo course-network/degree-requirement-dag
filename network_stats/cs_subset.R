@@ -52,4 +52,11 @@ cs <- rbind(or_to_cs,
             input_to_cs,
             cs_to_cs) %>% distinct()
 
-head(cs)
+# Identify CS Nodes
+cs_node <- node %>% filter(course %in% c(as.character(cs$pre_req), 
+                                         as.character(cs$course)))
+
+# Write Edges and Nodes to disk
+write.csv(file = "./course_data/csv/CS/CS_edge.csv", x = cs, row.names = F)
+write.csv(file = "./course_data/csv/CS/CS_node.csv", x = cs_node, row.names = F)
+

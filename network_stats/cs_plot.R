@@ -4,6 +4,11 @@
 #'
 # ....................................
 
+library(dplyr)
+library(igraph)
+
+cs <- read.csv(file = "./course_data/csv/CS/CS_edge.csv", stringsAsFactors = F)
+# Don't really need node info, just edges to create this plot
 
 # Create igraph object ------------------------------
 cs_net <- graph_from_data_frame(cs, directed = T)
