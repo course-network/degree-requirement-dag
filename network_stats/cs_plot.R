@@ -4,14 +4,11 @@
 #'
 # ....................................
 
-<<<<<<< HEAD
 library(dplyr)
 library(igraph)
 
 cs <- read.csv(file = "./course_data/csv/CS/CS_edge.csv", stringsAsFactors = F)
 # Don't really need node info, just edges to create this plot
-=======
->>>>>>> 40b4a8d9c75c87e69c56cdf3d15abf80ee595c81
 
 # Create igraph object ------------------------------
 cs_net <- graph_from_data_frame(cs, directed = T)
@@ -27,11 +24,8 @@ E(cs_net)$edge.color = cs$or_color
 # V(cs_net)$vertex.size = 1
 # plot.igraph(sub_net)
 
-<<<<<<< HEAD
 cs_layout <- layout_nicely(graph = cs_net)
-=======
-cs_layout <- layout_nicely(graph = sub_net)
->>>>>>> 40b4a8d9c75c87e69c56cdf3d15abf80ee595c81
+
 plot(cs_net, directed = T,
      layout = cs_layout,
      edge.color = cs$or,
