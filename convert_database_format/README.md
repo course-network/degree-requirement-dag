@@ -16,7 +16,7 @@ example:
 ```bash
 python3 ./pickle_to_csv cs_courses
 ```
-This generates cs_courses_nodes.csv and cs_courses_edges.csv in [course_data/json](../course_data/json)
+This generates cs_courses_nodes.csv and cs_courses_edges.csv in [course_data/csv](../course_data/csv)
 
 # nodes.csv format
 Course title, or degree
