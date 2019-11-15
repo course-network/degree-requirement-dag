@@ -4,16 +4,6 @@ import re
 from sys import argv
 
 
-def determine_highest_prereq(course):
-    if course.startswith('OR'):
-        highest_prereqs = []
-        for prereq in courses[course]['prereqs']:
-            highest_prereqs.append(determine_highest_prereq(prereq))
-        return max(highest_prereqs)
-    else:
-        return int(re.findall('[\d]+', course)[0])
-
-
 if __name__ == '__main__':
     if len(argv) < 2:
         exit("Usage: 'python3 pickle_to_csv.py [name of object]'")
@@ -27,17 +17,13 @@ if __name__ == '__main__':
     }
 
     for course, data in courses.items():
-        # if course.startswith('OR'):
-        #     fy = 2.5*(800 - (determine_highest_prereq(course) + 20))
-        # else:
-        #     fy = 2.5*(800 - int(re.findall('[\d]+', course)[0]))
         json_object['nodes'].append({
             'id': course,
-            'group': data['or_magnitude'],
+            'in_degree': data['or_magnitude'],
             'size': 1
         })
         for prereq in data['prereqs']:
             json_object['links'].append({'source': prereq, 'target': course})
 
-    with open(f'../course_data/d3/{pickle_obj}.json', 'w') as outfile:
+    with open(f'../course_data/json/{pickle_obj}.json', 'w') as outfile:
         json.dump(json_object, outfile)
