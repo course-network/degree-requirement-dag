@@ -6,16 +6,17 @@ example:
 ```bash
 python3 ./pickle_to_json cs_courses
 ```
-
+This generates cs_courses.json in [course_data/json](../course_data/json)
 
 # Convert pickle to csv
-'''bash
+```bash
 python3 ./pickle_to_csv <name of pickle>
-'''
+```
 example:
-'''bash
+```bash
 python3 ./pickle_to_csv cs_courses
-'''
+```
+This generates cs_courses_nodes.csv and cs_courses_edges.csv in [course_data/json](../course_data/json)
 
 # nodes.csv format
 Course title, or degree
