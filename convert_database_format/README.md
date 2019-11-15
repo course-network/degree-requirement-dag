@@ -1,11 +1,11 @@
 # Convert pickle to JSON
-'''bash
+```bash
 python3 ./pickle_to_json <name of pickle>
-'''
+```
 example:
-'''bash
+```bash
 python3 ./pickle_to_json cs_courses
-'''
+```
 
 
 # Convert pickle to csv
