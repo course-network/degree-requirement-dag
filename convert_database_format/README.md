@@ -1,3 +1,22 @@
+# Convert pickle to JSON
+'''bash
+python3 ./pickle_to_json <name of pickle>
+'''
+example:
+'''bash
+python3 ./pickle_to_json cs_courses
+'''
+
+
+# Convert pickle to csv
+'''bash
+python3 ./pickle_to_csv <name of pickle>
+'''
+example:
+'''bash
+python3 ./pickle_to_csv cs_courses
+'''
+
 # nodes.csv format
 Course title, or degree
 
