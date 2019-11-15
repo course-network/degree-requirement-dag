@@ -2,7 +2,7 @@
 The data from parsing the course catalog is stored in courses_parsed.obj
 
 # Subsetting courses
-In [degreee_requirements](degree_requirements), links to degree course listings are specified in [degree_requirement_urls.json](degree_requirements/degree_requirement_urls.json). Add the page for the degree you are interested in and give it a name.
+In [degreee_requirements](../degree_requirements), links to degree course listings are specified in [degree_requirement_urls.json](../degree_requirements/degree_requirement_urls.json). Add the page for the degree you are interested in and give it a name.
 
 Then run
 ```bash
