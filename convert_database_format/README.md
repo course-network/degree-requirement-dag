@@ -1,20 +1,20 @@
 # Convert pickle to JSON
 ```bash
-python3 ./pickle_to_json <name of pickle>
+python3 ./pickle_to_json <name of degree>
 ```
 example:
 ```bash
-python3 ./pickle_to_json cs_courses
+python3 ./pickle_to_json cs
 ```
 This generates cs_courses.json in [course_data/json](../course_data/json)
 
 # Convert pickle to csv
 ```bash
-python3 ./pickle_to_csv <name of pickle>
+python3 ./pickle_to_csv <name of degree>
 ```
 example:
 ```bash
-python3 ./pickle_to_csv cs_courses
+python3 ./pickle_to_csv cs
 ```
 This generates cs_courses_nodes.csv and cs_courses_edges.csv in [course_data/csv](../course_data/csv)
 

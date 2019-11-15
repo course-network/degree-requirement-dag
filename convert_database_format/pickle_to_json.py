@@ -9,7 +9,7 @@ if __name__ == '__main__':
         exit("Usage: 'python3 pickle_to_csv.py [name of object]'")
     pickle_obj = argv[1]
 
-    courses_file = open(f'../course_data/{pickle_obj}.obj', 'rb')
+    courses_file = open(f'../course_data/{pickle_obj}_courses.obj', 'rb')
     courses = pickle.load(courses_file)
     json_object = {
         'nodes': [],
@@ -25,5 +25,5 @@ if __name__ == '__main__':
         for prereq in data['prereqs']:
             json_object['links'].append({'source': prereq, 'target': course})
 
-    with open(f'../course_data/json/{pickle_obj}.json', 'w') as outfile:
+    with open(f'../course_data/json/{pickle_obj}_courses.json', 'w') as outfile:
         json.dump(json_object, outfile)
