@@ -31,6 +31,9 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
     d3.json("../course_data/d3/env_engr_courses.json", function (error, graph) {
         if (error) throw error;
         update(graph.links, graph.nodes);
+    d3.select('body').append('svg')
+      .attr('width', window.innerWidth)
+      .attr('height', window.innerHeight)
     })
 
     function update(links, nodes) {
