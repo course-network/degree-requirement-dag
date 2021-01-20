@@ -3,7 +3,7 @@ The idea of this project is to visualize a college degree program as a tree netw
 
 We use a few degrees from Oregon State as examples. [Catalog data acquisition](catalog_data_acquisition) scrapes course prerequisites from OSU's catalog. [Degree requirements](degree_requirements) scrapes degree requirements from OSU's catalog. [Parse course requirements](parse_course_requirements) processes more complicated requirements. [d3](d3) visualizes this data. 
 
-# Proposed method for implementing uncertainty in a tree
+## Proposed method for implementing uncertainty in a tree
 Degree requirements at OSU are generally expressed as a list of OR conditions. For example, an ecological engineering student must take "Ethics" or "The Responsible Engineer".
 
 Sometimes, these conditions require a variable amount of courses from a variable amount of options. For example, a computational physics student must take two of three available senior capstone courses.
