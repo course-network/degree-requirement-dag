@@ -1,11 +1,9 @@
 var colors = d3.scaleOrdinal(d3.schemeCategory10);
     var svg = d3.select("svg"),
+        width = window.innerWidth,
+        height = window.innerHeight,
         node,
         link;
-    
-    d3.select('body').append('svg')
-      .attr('width', window.innerWidth)
-      .attr('height', window.innerHeight)
     
     svg.append('defs').append('marker')
         .attrs({'id':'arrowhead',
