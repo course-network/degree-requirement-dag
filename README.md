@@ -3,7 +3,7 @@ The idea of this project is to visualize a college degree program as a tree netw
 
 We use a few degrees from Oregon State as examples. [Catalog data acquisition](catalog_data_acquisition) scrapes course prerequisites from OSU's catalog. [Degree requirements](degree_requirements) scrapes degree requirements from OSU's catalog. [Parse course requirements](parse_course_requirements) processes more complicated requirements. [d3](d3) visualizes this data. 
 
-# Proposed constraints for implementing uncertainty in a tree
+# Proposed method for implementing uncertainty in a tree
 Degree requirements at OSU are generally expressed as a list of OR conditions. For example, an ecological engineering student must take "Ethics" or "The Responsible Engineer".
 
 Sometimes, these conditions require a variable amount of courses from a variable amount of options. For example, a computational physics student must take two of three available senior capstone courses.
@@ -22,7 +22,7 @@ We also define the "order" of the node as the amount of prerequisite nodes it re
 
 The goal of this project is to visualize all possible paths through a degree program by displaying all courses and OR nodes for a degree program. As a student makes decisions in which courses they take (either completed or planned), the network can be trimmed down and redrawn to eliminate OR nodes. A user interface will allow the student to trim the tree by selecting planned courses.
 
-# Proposed constraints
+## Proposed constraints
 ### 1. No class is drawn more than once
 This rule ensures that the network is a tree.
 
