@@ -4,7 +4,7 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
         height = +svg.attr("height"),
         node,
         link;
-    
+
     svg.append('defs').append('marker')
         .attrs({'id':'arrowhead',
             'viewBox':'-0 -5 10 10',
