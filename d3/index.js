@@ -1,12 +1,8 @@
 var colors = d3.scaleOrdinal(d3.schemeCategory10);
-    var width = $(window).width();
-    var height = $(window).height(); 
     var svg = d3.select("svg"),
-        width = width,
-        height = height,
         node,
         link;
-
+    
     svg.append('defs').append('marker')
         .attrs({'id':'arrowhead',
             'viewBox':'-0 -5 10 10',
@@ -19,6 +15,8 @@ var colors = d3.scaleOrdinal(d3.schemeCategory10);
         .append('svg:path')
         .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
         .attr('fill', '#999')
+        .attr('width', window.innerWidth)
+        .attr('height', window.innerHeight)
         .style('stroke','none');
 
     var attractForce = d3.forceManyBody().strength(500).distanceMax(4000).distanceMin(600);
