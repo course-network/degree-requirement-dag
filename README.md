@@ -1,5 +1,5 @@
 # Degree Tree Network
-The idea of [this project](https://github.com/course-network/degree-requirement-tree/) is to visualize a college degree program as a tree network. A single, top level node will represent the degree, and a hierarchy of the required courses will branch down from it. This might serve as an advising tool for students planning their schedule or choosing a major.
+The idea of [this project](https://github.com/course-network/degree-requirement-tree/) is to visualize a college degree program as a tree network. A single top level node will represent the degree, and a hierarchy of the required courses will branch down from it. This might serve as an advising tool for students planning their schedule or choosing a major.
 
 We use a few degrees from Oregon State as examples. [Catalog data acquisition](catalog_data_acquisition) scrapes course prerequisites from OSU's catalog. [Degree requirements](degree_requirements) scrapes degree requirements from OSU's catalog. [Parse course requirements](parse_course_requirements) processes more complicated requirements. [d3](d3) visualizes this data. 
 
