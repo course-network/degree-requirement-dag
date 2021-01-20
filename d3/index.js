@@ -1,7 +1,7 @@
 var colors = d3.scaleOrdinal(d3.schemeCategory10);
     var svg = d3.select("svg"),
-        width = window.innerWidth,
-        height = window.innerHeight,
+        width = +svg.attr("width"),
+        height = +svg.attr("height"),
         node,
         link;
     
