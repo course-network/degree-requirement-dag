@@ -1,5 +1,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
 <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+
+<style>
+#scaled-frame { width: 2400px; height: 1500px; border: 0px; }
+#scaled-frame {
+    zoom: 0.71;
+    -moz-transform: scale(0.5);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.5);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ #scaled-frame  { zoom: 1;  }
+}
+</style>
+
 <zero-md src="README.md"></zero-md>
 <br>
-<iframe src="https://course-network.github.io/degree-requirement-dag/d3/index.html" onload="this.width=0.9*screen.width;this.height=0.8*screen.height;"></iframe>
+<iframe id="scaled-frame" src="https://course-network.github.io/degree-requirement-dag/d3/index.html" onload="this.width=0.9*screen.width;this.height=0.8*screen.height;"></iframe>
