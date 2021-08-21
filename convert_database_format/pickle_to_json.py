@@ -36,7 +36,10 @@ if __name__ == '__main__':
         return max_depth
 
     for node in json_object['nodes']:
-        node['level'] = traverse_to_root(node['id'])
+        if node['id'].startswith('OR'):
+            node['level'] = 0
+        else:
+            node['level'] = traverse_to_root(node['id'])
 
 
     with open(f'../course_data/json/{pickle_obj}_courses.json', 'w') as outfile:
