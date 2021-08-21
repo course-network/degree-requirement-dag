@@ -25,5 +25,19 @@ if __name__ == '__main__':
         for prereq in data['prereqs']:
             json_object['links'].append({'source': prereq, 'target': course})
 
+    # Assign a level to each node indicating max depth to root node
+    def traverse_to_root(node_id, current_depth = 1, max_depth = 1):
+        links = [link for link in json_object['links'] if link['source'] is node_id]
+        for link in links:
+            if link['target'] != pickle_obj:
+                current_depth = traverse_to_root(link['target'], current_depth + 1, max_depth)
+            if current_depth > max_depth:
+                max_depth = current_depth
+        return max_depth
+
+    for node in json_object['nodes']:
+        node['level'] = traverse_to_root(node['id'])
+
+
     with open(f'../course_data/json/{pickle_obj}_courses.json', 'w') as outfile:
         json.dump(json_object, outfile)

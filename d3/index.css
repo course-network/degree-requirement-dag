@@ -1,13 +1,9 @@
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 3px;
+.node {
+
 }
 
-.node text { font: 12px sans-serif; }
-
 .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 2px;
+  stroke: #999;
+  stroke-opacity: .6;
+  stroke-width: 1px;
 }

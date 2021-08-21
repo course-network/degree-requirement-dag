@@ -1,4 +1,7 @@
 # Convert pickle to JSON
+
+This prepares course data for a d3 force layout. It creates a list of nodes and a list of links. Nodes are assigned a "level" which indicates their max depth from the root node.
+
 ```bash
 python3 ./pickle_to_json <name of degree>
 ```

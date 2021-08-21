@@ -1,57 +1,107 @@
-d3.json('treeData.json', function(treeData) {
 
-    // set the dimensions and margins of the diagram
-    const top = 40;
-    const right = 90;
-    const bottom = 50;
-    const left= 90;
-    const width = 660 - left - right;
-    const height = 500 - top - bottom;
+var colors = d3.scaleOrdinal(d3.schemeCategory10);
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height"),
+        node,
+        link;
 
-    // declares a tree layout and assigns the size
-    const treeMap = d3.tree()
-                    .size([width, height]);
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
 
-    // assigns the data to a hierarchy using parent-child relationships
-    // maps the node data to the tree layout
-    const nodes = treeMap(d3.hierarchy(treeData));
+    var attractForce = d3.forceManyBody().strength(500).distanceMax(4000).distanceMin(600);
+    var repelForce = d3.forceManyBody().strength(-1600).distanceMax(3000).distanceMin(0);
+    var simulation = d3.forceSimulation()
+        .force("link", d3.forceLink().id(function (d) {return d.id;}).distance(100).strength(1))
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("attractForce", attractForce)
+        .force("repelForce", repelForce);
 
-    // append the svg object to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
-    const svg = d3.select('body')
-                .append('svg')
-                .attr('width', width + left + right)
-                .attr('height', height + top + bottom),
-    g = svg.append('g')
-           .attr('transform', `translate(${left},${top})`);
+    d3.json("../course_data/d3/bee_courses.json", function (error, graph) {
+        if (error) throw error;
+        update(graph.links, graph.nodes);
+    })
 
-    // adds the links between the nodes
-    const link = g.selectAll('.link')
-                .data(nodes.descendants().slice(1))
-                .enter().append('path')
-                .attr('class', 'link')
-                .attr('d', ({x, y, parent}) => {
-                    const yLink = (y + parent.y) / 2;
-                    return `M${x},${y}C${x},${yLink} ${parent.x},${yLink} ${parent.x},${parent.y}`
-                });
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)')
 
-    // adds each node as a group
-    const node = g.selectAll('.node')
-                .data(nodes.descendants())
-                .enter()
-                .append('g')
-                .attr('class', ({children}) => `node${(children ? ' node--internal' : ' node--leaf')}`)
-                .attr('transform', ({x, y}) => `translate(${x},${y})`);
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
 
-    // adds the circle to the node
-    node.append('circle')
-        .attr('r', 10);
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    //.on("end", dragended)
+            );
 
-    // adds the text to the node
-    node.append('text')
-        .attr('dy', '.35em')
-        .attr('y', ({children}) => children ? -20 : 20)
-        .style('text-anchor', 'middle')
-        .text(({data}) => data.name);
-});
+        node.append("circle")
+            .attr("r", 5)
+            .style("fill", function (d, i) {return colors(i);})
+
+        node.append("title")
+            .text(function (d) {return d.id;});
+
+        node.append("text")
+            .attr("dy", -3)
+            .text(function (d) {return d.id;});
+
+        simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        simulation.force("link")
+            .links(links);
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+    }
+
+    function dragstarted(d) {
+        return null;
+    }
+
+    function dragged(d) {
+        return null;
+    }
