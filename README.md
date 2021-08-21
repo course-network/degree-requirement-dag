@@ -1,7 +1,9 @@
 # Degree Directed Acyclic Graph
-The idea of [this project](https://github.com/course-network/degree-requirement-dag/) is to visualize a college degree program as a DAG. A single top level node will represent the degree, and required courses will branch down from it. This might serve as an advising tool for students planning their schedule or choosing a major.
+The idea of [this project](https://github.com/course-network/degree-requirement-dag/) is to visualize the course requirements of a college degree program as a force directed graph. A single top level node will represent the degree, and the course requirements will branch down from it.
 
-We use a few degrees from Oregon State as examples. [Catalog data acquisition](catalog_data_acquisition) scrapes course prerequisites from OSU's catalog. [Degree requirements](degree_requirements) scrapes degree requirements from OSU's catalog. [Parse course requirements](parse_course_requirements) processes more complicated requirements. [d3](d3) visualizes this data. 
+The idea is that this might serve as an advising tool for students planning their schedule or choosing a major. It would visually display the progression of courses and decisions. Displaying two degrees at once would show the student which courses are shared and which are not.
+
+We start with the ecological engineering degree from Oregon State as an example. [Catalog data acquisition](catalog_data_acquisition) scrapes course prerequisites from OSU's catalog. [Degree requirements](degree_requirements) scrapes degree requirements from OSU's catalog. [Parse course requirements](parse_course_requirements) processes more complicated requirements. [d3](d3) visualizes this data.
 
 ## Proposed method for implementing uncertainty in a DAG
 Degree requirements at OSU are generally expressed as a list of OR conditions. For example, an ecological engineering student must take "Ethics" or "The Responsible Engineer".
@@ -20,23 +22,11 @@ graph BT;
 
 We also define the "order" of the node as the amount of prerequisite nodes it requires to be satisfied. In the ethics requirement example, only one course is required so the OR node order is 1.
 
-The goal of this project is to visualize all possible paths through a degree program by displaying all courses and OR nodes for a degree program. As a student makes decisions in which courses they take (either completed or planned), the network can be trimmed down and redrawn to eliminate OR nodes. A user interface will allow the student to trim the DAG by selecting planned courses.
+The goal of this project is to visualize all possible paths through a degree program by displaying all courses and OR nodes for a degree program. One idea to increase its utility is to allow the student to make decisions about which courses they take (either completed or planned), trimming the network to eliminate OR nodes.
 
-## Proposed constraints
-### 1. No class is drawn more than once
-This rule ensures that the network is a DAG.
+## Hierarchical ordering
+Ideally, the courses would be ordered so that the earliest courses the student takes are at the bottom. As you move up the y-axis, you move later in the degree program until reaching the degree node at the top.
 
-### 2. OR conditions are represented by a single node, with connections to each option
-OR conditions represent uncertainty.
+The challenge with this is our data is not a tree (some nodes have multiple parents). So, we cannot take advantage of d3's built-in hierarchical layouts. Instead, we use the many-body force layout and add a strong y-position force. This force makes a node's y-position proportional to its max depth to the root node.
 
-### 3. OR nodes have an "order" property that determines how many prerequisite courses it requires to be satisfied
-This lets the condition be represented by a single node. This avoids using hierarchies of OR nodes to represent conditions with orders greater than 1, which is visually complicated.
-
-### 4. OR nodes are removed once its "order" is met
-By choosing courses that satisfy the condition, that requirement, OR nodes and branches of the DAG may be eliminated.
-
-### 5. DAG redraws itself upon selection in condition
-With each decision, the network must reevaluate which branches exist given the remaining nodes.
-
-### 6. Conditions begin unselected
-The network displays all possible outcomes, which the user narrows down until they have their specific degree plan.
+[This does achieve the desired result](d3/index.html), but it also shows the infeasibility of this project. A degree is simply too complicated to meaningfully represent in this way - there are far too many OR nodes and courses cluttering the graph. This may be resolved by hiding the OR nodes, but this raises further issues of positioning and accurate representation.
