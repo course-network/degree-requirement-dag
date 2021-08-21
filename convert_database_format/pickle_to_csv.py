@@ -15,11 +15,11 @@ if __name__ == '__main__':
 
     edges_writer = csv.DictWriter(edges_csv, fieldnames=['source', 'dest'])
     nodes_writer = csv.DictWriter(nodes_csv,
-                                  fieldnames=['node', 'or_magnitude'])
+                                  fieldnames=['node', 'in_degree'])
 
     for course, data in courses.items():
         nodes_writer.writerow(
-            {'node': course, 'or_magnitude': data['or_magnitude']})
+            {'node': course, 'in_degree': data['or_magnitude']})
         for prereq in data['prereqs']:
             edges_writer.writerow({'source': prereq, 'dest': course})
 

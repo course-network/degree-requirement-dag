@@ -3,5 +3,7 @@
     "physics": "https://catalog.oregonstate.edu/college-departments/science/physics/physics-ba-bs-hba-hbs/#requirementstext",
     "math": "https://catalog.oregonstate.edu/college-departments/science/mathematics/mathematics-bs-hbs/#requirementstext",
     "bee": "https://catalog.oregonstate.edu/college-departments/engineering/biological-ecological-engineering/ecological-engineering-bs-hbs/#requirementstext",
-    "env_engr": "https://catalog.oregonstate.edu/college-departments/engineering/school-chemical-biological-environmental-engineering/environmental-engineering-ba-bs-hba-hbs/#requirementstext"
+    "env_engr": "https://catalog.oregonstate.edu/college-departments/engineering/school-chemical-biological-environmental-engineering/environmental-engineering-ba-bs-hba-hbs/#requirementstext",
+	"bio": "https://catalog.oregonstate.edu/college-departments/science/school-life-sciences/integrative-biology/biology-bs-hbs/#requirementstext",
+	"chem": "https://catalog.oregonstate.edu/college-departments/science/chemistry/chemistry-ba-bs-hba-hbs/#requirementstext"
 }
